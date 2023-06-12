@@ -1,0 +1,47 @@
+.card {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 5% auto;
+}
+
+.card.visible {
+    background-color: #ffffe0;
+}
+
+.card.hidden {
+    background-color: #e0e0e0;
+}
+
+.card-content {
+    padding: 20px;
+    transition: opacity 0.3s;
+}
+
+.hidden-writing {
+    font-size: 16px;
+    color: #333;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.visible-writing {
+    font-size: 16px;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.card.visible .hidden-writing {
+    opacity: 0;
+}
+
+.card.visible .visible-writing {
+    opacity: 1;
+}
