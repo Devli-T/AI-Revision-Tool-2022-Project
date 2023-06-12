@@ -45,7 +45,7 @@ if len(sys.argv) != 4:
     print("Invalid given argument length. Given: " + sys.argv)
     sys.exit(2)
 
-database_name = 'flashcards.db'
+database_name = 'flashcards.sqlite'
 username = sys.argv[1]
 subject = sys.argv[2]
 file_name = sys.argv[3]
@@ -64,6 +64,8 @@ if not os.path.exists(database_name):
 
 if not check_table_exists(database_name, table_name):
     create_table(database_name, table_name)
+
+# dev program
 
 # Populate the table with test data.
 for _ in range(25):
