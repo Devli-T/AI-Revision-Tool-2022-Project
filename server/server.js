@@ -37,10 +37,10 @@ app.post('/getQuestionCount', async (req, res) => {
 
     console.log('User ' + username + ' requested subject ' + subject + ' question count');
     let answer = await database.getQuestionCount(username, subject);
-    console.log("Got an answer of ", answer);
-
+    
     if (answer) {
-        res.status(200).json({ count: answer }).end();
+        console.log("Got an answer of " + await answer);
+        res.status(200).json({ count: await answer }).end();
         return;
     }
     console.error("Was unable to get the question count for " + username + " + " + subject);

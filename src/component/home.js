@@ -1,7 +1,6 @@
 import React from 'react';
-import { API_TextSubmission } from '../config'; // Adjust the path as per your directory structure
 import '../css/home.css';
-import { sendPostRequest } from '../utils/apiUtils';
+import { API_submitText, sendPostRequest } from '../utils/apiUtils';
 
 const Home = () => {
     const username = "TestPerson";      // TODO: Change when user accounts get implimented
@@ -10,11 +9,7 @@ const Home = () => {
     const submitText = async () => {
         var text = document.getElementById("textPrompt").value;
 
-        sendPostRequest(API_TextSubmission, {
-            username: username,
-            subject: subject,
-            text: text
-        });
+        API_submitText(username, subject, text);
     };
 
     const uploadFile = (event) => {
@@ -27,11 +22,7 @@ const Home = () => {
 
             if (!text) return;
 
-            sendPostRequest(API_TextSubmission, {
-                username: username,
-                subject: subject,
-                text: text
-            })
+            API_submitText(username, subject, text);
         };
         reader.readAsText(file);
 
