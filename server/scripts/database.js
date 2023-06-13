@@ -1,7 +1,10 @@
-const sqlite3 = require('sqlite3').verbose();
+const { resolvePath } = require('react-router-dom');
 
-function checkTableExists(database, table_name) {
-  let conn = new sqlite3.Database(database);
+const sqlite3 = require('sqlite3').verbose();
+const database_name = "flashcards.sqlite"
+
+function checkTableExists(table_name) {
+  let conn = new sqlite3.Database(database_name);
   let query = `SELECT name FROM sqlite_master WHERE type='table' AND name=?`;
 
   return new Promise((resolve, reject) => {
@@ -16,8 +19,7 @@ function checkTableExists(database, table_name) {
   });
 }
 
-// unsafe
-function createTable(database_name, table_name) {
+function createTable(table_name) {
   let conn = new sqlite3.Database(database_name);
   let query = `CREATE TABLE IF NOT EXISTS ${table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, question TEXT, answer TEXT)`;
 
@@ -33,30 +35,65 @@ function createTable(database_name, table_name) {
   });
 }
 
-function insertData(database_name, table_name, subject, question, answer) {
+function insertData(table_name, subject, question, answer) {
   let conn = new sqlite3.Database(database_name);
   let query = `INSERT INTO ${table_name} (subject, question, answer) VALUES (?, ?, ?)`;
 
   return new Promise((resolve, reject) => {
-    conn.serialize(() => {
-      let stmt = conn.prepare(query);
-      for (let i = 0; i < 25; i++) {
-        stmt.run(subject, question, answer);
+    let stmt = conn.prepare(query);
+    stmt.run(subject, question, answer, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
       }
-      stmt.finalize((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-        conn.close();
-      });
+      stmt.finalize();
+      conn.close();
     });
   });
 }
 
+
+function getData(table_name, subject, questionNumber) {
+  let conn = new sqlite3.Database(database_name);
+  let query = `SELECT question, answer FROM ${table_name} WHERE subject = ?;`;
+
+  return new Promise((resolve, reject) => {
+    conn.get(query, [subject], (err, row) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        reject(err);
+        return;
+      }
+      console.log('Successful data retreival');
+      resolve(row[questionNumber]);
+    })
+    conn.close();
+  });
+}
+
+function getQuestionCount(table_name, subject) {
+  let conn = new sqlite3.Database(database_name);
+  let query = `SELECT id FROM ${table_name} WHERE subject = ?;`;
+
+  return new Promise((resolve, reject) => {
+    conn.all(query, [subject], (err, rows) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        reject(err);
+      }
+      resolve(parseInt(rows.length));
+    })
+  });
+}
+
+
+
 module.exports = {
   checkTableExists,
   createTable,
-  insertData
+  insertData,
+  getData,
+  getQuestionCount,
+  
 };
