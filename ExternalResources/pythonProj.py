@@ -66,6 +66,15 @@ if not os.path.exists(database_name):
 if not check_table_exists(database_name, table_name):
     create_table(database_name, table_name)
 
+
+with open(file_name, 'r') as file:
+    inputData = file.read()
+
+    # Dev program here
+
+    # print(inputData)
+
+
 #### dev program here ####
 
 # Populate the table with test data.
