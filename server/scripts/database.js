@@ -54,12 +54,12 @@ function insertData(table_name, subject, question, answer) {
 }
 
 
-function getData(table_name, subject, questionNumber) {
+async function getData(table_name, subject, questionNumber) {
   let conn = new sqlite3.Database(database_name);
   let query = `SELECT question, answer FROM ${table_name} WHERE subject = ?;`;
 
   return new Promise((resolve, reject) => {
-    conn.get(query, [subject], (err, row) => {
+    conn.all(query, [subject], (err, row) => {
       if (err) {
         console.error('Error executing query:', err);
         reject(err);

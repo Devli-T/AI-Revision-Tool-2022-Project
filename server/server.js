@@ -54,6 +54,7 @@ app.post('/getQuestion', (req, res) => {
     console.log('User ' + username + ' requested subject ' + subject + ' question ' + questionNumber);
 
     database.getData(username, subject, questionNumber).then((row) => {
+        console.log(row);
         if (row) {
             const question = row.question;
             const answer = row.answer;
