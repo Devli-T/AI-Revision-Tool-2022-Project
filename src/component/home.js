@@ -1,35 +1,15 @@
 import React from 'react';
-import { API_TextSubmission } from '../config'; // Adjust the path as per your directory structure
 import '../css/home.css';
+import { API_submitText, sendPostRequest } from '../utils/apiUtils';
 
 const Home = () => {
+    const username = "TestPerson";      // TODO: Change when user accounts get implimented
+    const subject = "TestSubject";      // TODO: Add in subject implimentation
+    
     const submitText = async () => {
         var text = document.getElementById("textPrompt").value;
-        var username = "TestPerson";      // TODO: Change when user accounts get implimented
-        var subject = "TestSubject";      // TODO: Add in subject implimentation
 
-        // Send to server backend
-        try {
-            const response = await fetch(API_TextSubmission, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    subject: subject,
-                    text: text
-                })
-            });
-
-            if (response.ok) {
-                console.log('Text submitted successfully');
-            } else {
-                console.log('Text submission failed');
-            }
-        } catch (error) {
-            console.error('Error occurred during text submission:', error);
-        }
+        API_submitText(username, subject, text);
     };
 
     const uploadFile = (event) => {
@@ -38,11 +18,14 @@ const Home = () => {
         reader.onload = function (e) {
             var text = e.target.result;
 
-            // Dealing with the text
             console.log("Text given in file: " + text);
 
+            if (!text) return;
+
+            API_submitText(username, subject, text);
         };
         reader.readAsText(file);
+
     };
 
     return (

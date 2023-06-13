@@ -1,48 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');   // For file saving
-const { spawn } = require('child_process');  // For running python programs etc
 const cors = require('cors');
+const database = require('./scripts/database');
+const pythonHandler = require('./scripts/pythonHandler');
+const fileHandler = require('./scripts/filehandler')
 
 const app = express();
 
 // Configure CORS to allow requests only from http://localhost:3000
 const corsOptions = {
-  origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000',
 };
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
-
-
-// Saves a file
-function saveFile(fileName, text) {
-    fs.writeFile(fileName, text, (err) => {
-        if (err) {
-            console.error('Error saving text to file:', err);
-            res.status(500).json({ message: 'Failed to save text to file' }).end();
-            return;
-        }
-        console.log('Text saved to file:', fileName);
-    });
-}
-
-// Will run the python program with the fileName command line argument
-function runPythonProgram(username, subject, fileName) {
-    const pythonProcess = spawn('python', ['../ExternalResources/pythonProj.py', username, subject, fileName]);    // to be changed later
-
-    pythonProcess.stdout.on('data', (data) => {
-        console.log(`Python program stdout: ${data}`);
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-        console.error(`Python program stderr: ${data}`);
-    });
-
-    pythonProcess.on('close', (code) => {
-        console.log(`Python program exited with code ${code}`);
-    });
-}
 
 
 app.post('/textSubmission', (req, res) => {
@@ -55,14 +26,52 @@ app.post('/textSubmission', (req, res) => {
 
     const fileName = './UserGivenInfo/' + username + ".txt";
 
-    saveFile(fileName, text);
+    fileHandler.saveFile(fileName, text);
+    pythonHandler.runPythonProgram(username, subject, fileName);
 
-    runPythonProgram(username, subject, fileName);
-
-    res.status(200).json({ message: 'Text submitted successfully' }).end();
+    res.status(200).end();
 });
+
+app.post('/getQuestionCount', async (req, res) => {
+    const { username, subject } = req.body;
+
+    console.log('User ' + username + ' requested subject ' + subject + ' question count');
+    let answer = await database.getQuestionCount(username, subject);
+    
+    if (answer) {
+        console.log("Got an answer of " + await answer);
+        res.status(200).json({ count: await answer }).end();
+        return;
+    }
+    console.error("Was unable to get the question count for " + username + " + " + subject);
+    res.status(500).end();
+});
+
+// gets the question given username, subject and question number.
+app.post('/getQuestion', (req, res) => {
+    const { username, subject, questionNumber } = req.body;
+
+    console.log('User ' + username + ' requested subject ' + subject + ' question ' + questionNumber);
+
+    database.getData(username, subject, questionNumber).then((row) => {
+        console.log(row);
+        if (row) {
+            const question = row.question;
+            const answer = row.answer;
+            res.status(200).json({ question: question, answer: answer }).end();
+        }
+        console.error("row did not exist");
+        res.status(500).end();
+    }).catch(error => {
+        console.error(error);
+        res.status(500).end();
+    })
+});
+
+
 
 
 app.listen(5000, () => {
     console.log('API server is running on port 5000');
 });
+
