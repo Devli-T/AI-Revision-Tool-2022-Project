@@ -1,70 +1,34 @@
-# Getting Started with Create React App
+# How to use
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In order to run the application, simply open a terminal and run Start.bat (Windows), or Start.sh (Linux). These files contain all of the necessary intstructions in order to start both the front end and back end server. 
 
-## Available Scripts
+### Notes:
+ - This app has not been deployed yet
+ - The current build of this app contained in this project is highly outdated.
 
-In the project directory, you can run:
+### How this app works:
 
-### `npm start`
+There are 2 applications in this app. The front end server, which will run on localhost:3000, and the backend server, which will run non localhost:5000. CORS has been enabled from 3000 to 5000, so the front-end can call the API directly. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<span style="color: red; font-style: italic;">Note: Any issues with this when deploying may be from the CORS not being set up for the external IP's.</span>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The front-end application is all the funky React stuff. The [component](/src/component/) folder stores all of the "parts" to the webpage. Each should be quite self explanitory. All of the linking to the server is done through the back-end API, where requests are sent to it. The requests have been modularised into the [apiUtils.js](/src/utils/apiUtils.js) file, which will handle all of the requests to and from the server. The [css](/src/css/) folder contains all the linked css. [App](/src/App.js) is the vital "pivot" point of the application, where it will handle all routing through it's routing table. 
 
-### `npm test`
+The back-end application is just the [server](/server/) folder, the key item in it being [server.js](/server/server.js). This is then the express server which is run parrallel to the front-end. The key information about [server.js](/server/server.js) is the 
+```js
+app.post('/{route}', (req, res) => {
+    ...
+}
+```
+lines. These lines of code are the API routes, where any code run on the other side of it is handled server-side. ([src](/src/) files are all handled client-side). The [server.js](/server/server.js) is aided through its various script classes which have been used to modularise code easier. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### Lifecycle of the program
+Once the user has submitted their text (which is the _input_ for the dev-python program), this will be saved to a document in the [UserGivenInfo](/server/UserGivenInfo/) under {username}.txt. (_Note: this needs to be later changed into the format {username}{subject}.txt, but for now, this is ok..._). Next, the server will run the [pythonProj.py](/ExternalResources/pythonProj.py), which is the location of the python code which needs to be run. Currently, the python code just does basic database managing. There is a comment in [pythonProj.py](/ExternalResources/pythonProj.py) which will tell you where to put your code. The "input" to the dev program is then the `inputData` variable found in the program. Once the dev program successfully outputs into the database, the python project should close. From there, the rest is sorted out through the [viewQuiz.js](/src/component/viewQuiz.js).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### What the dev program needs to output. How does this fit?
+A sample output has been made just for convenience. The line 
+```py
+insert_data(database_name, table_name, subject, generate_random_string(), generate_random_string())
+```
+is the sample output. This line needs to be kept mostly the same. This line should be run <span style="font-style: bold;">ONCE</span> per output'd data. The `database_name`, `table_name`, and `subject` variables should be kept the same. the first `generate_random_string()` function should be replaced with the _question_, and the second `generate_random_string()` should be replaced with the corresponding _answer_. Once this has been changed, you can remove the `generate_random_string()` function, as it will not be required (along with the random / rnd references at the top of the file). Once this is all done; the program should work as intended.
