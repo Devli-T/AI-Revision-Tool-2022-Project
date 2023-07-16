@@ -3,6 +3,24 @@ import os
 import random
 import sqlite3
 import re
+import openai
+
+openai.api_key = ""
+
+def generate_questions_answers(input):
+    prompt = f"I want to revise the entirety of the following text, generate questions and specific answers in the following format Q1: \n A1: \n Q2: \n A2: ... \n\n\n\n{input}"
+    response = openai.Completion.create(
+        engine='text-davinci-002',
+        prompt=prompt,
+        temperature=0.7,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        timeout=20,
+    )
+
+    return response
+
 
 rng = random.Random()
 
@@ -43,7 +61,7 @@ def insert_data(database_name, table_name, subject, question, answer):
 
 # Argv needs to be: [username] [subject] [file]
 if len(sys.argv) != 4:
-    print("Invalid given argument length. Given: " + sys.argv)
+    print("Invalid given argument length. Given: " + str(len(sys.argv)))
     sys.exit(2)
 
 database_name = 'flashcards.sqlite'
@@ -69,10 +87,15 @@ if not check_table_exists(database_name, table_name):
 
 with open(file_name, 'r') as file:
     inputData = file.read()
-
-    # Dev program here
-
-    # print(inputData)
+    response = generate_questions_answers(inputData)
+    response_text = response['choices'][0]['text']
+    split_Response = response_text.splitlines()
+    split_Response.remove("")
+    
+    for i in range(len(split_Response)//2):
+        print()
+        print()
+        insert_data(database_name, table_name, subject, split_Response[2 * i][4:], split_Response[(2 * i) + 1][4:])
 
 
 #### dev program here ####

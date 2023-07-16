@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 jgfyhtejtrjuytukytkuyt
+=======
+Benefits of SSPs
+SSPs should increase productivity and shift LRAS to the right.
+-Lower Inflation Shifting AS to the right will cause a lower price level. By making the economy more efficient, SSPs will help reduce cost-push inflation.
+-Lower Unemployment SSPs can contribute to reducing structural, frictional and real-wage unemployment and therefore help reduce the natural rate of unemployment.
+-Improved economic growth SSPs will increase the sustainable rate of economic growth by increasing LRAS; this enables a higher rate of economic growth without causing inflation.
+-Improved trade and Balance of Payments By making firms more productive and competitive, they will be able to export more. This is important in light of the increased competition from an increasingly globalised marketplace.
+>>>>>>> 9184db6 (Added Dev's Code)

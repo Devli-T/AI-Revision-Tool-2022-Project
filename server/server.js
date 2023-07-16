@@ -9,7 +9,7 @@ const app = express();
 
 // Configure CORS to allow requests only from http://localhost:3000
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
 };
 app.use(cors(corsOptions));
 
@@ -29,7 +29,7 @@ app.post('/textSubmission', (req, res) => {
     fileHandler.saveFile(fileName, text);
     pythonHandler.runPythonProgram(username, subject, fileName);
 
-    res.status(200).end();
+    res.status(200).json({message: "Success"}).end();
 });
 
 app.post('/getQuestionCount', async (req, res) => {
@@ -71,7 +71,7 @@ app.post('/getQuestion', (req, res) => {
 
 
 
-app.listen(5000, () => {
-    console.log('API server is running on port 5000');
+app.listen(6969, () => {
+    console.log('API server is running on port 6969');
 });
 
