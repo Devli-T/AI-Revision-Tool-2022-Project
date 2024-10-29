@@ -24,9 +24,9 @@ lines. These lines of code are the API routes, where any code run on the other s
 
 
 ### Lifecycle of the program
-Once the user has submitted their text (which is the _input_ for the dev-python program), this will be saved to a document in the [UserGivenInfo](/server/UserGivenInfo/) under {username}.txt. (_Note: this needs to be later changed into the format {username}{subject}.txt, but for now, this is ok..._). Next, the server will run the [pythonProj.py](/ExternalResources/pythonProj.py), which is the location of the python code which needs to be run. Currently, the python code just does basic database managing. There is a comment in [pythonProj.py](/ExternalResources/pythonProj.py) which will tell you where to put your code. The "input" to the dev program is then the `inputData` variable found in the program. Once the dev program successfully outputs into the database, the python project should close. From there, the rest is sorted out through the [viewQuiz.js](/src/component/viewQuiz.js).
+Once the user has submitted their text (which is the _input_ for the python program), this will be saved to a document in the [UserGivenInfo](/server/UserGivenInfo/) under {username}.txt. (_Note: this needs to be later changed into the format {username}{subject}.txt, but for now, this is ok..._). Next, the server will run the [pythonProj.py](/ExternalResources/pythonProj.py), which is the location of the python code which needs to be run. Currently, the python code just does basic database managing. There is a comment in [pythonProj.py](/ExternalResources/pythonProj.py) which will tell you where to put your code. The "input" to the dev program is then the `inputData` variable found in the program. Once the dev program successfully outputs into the database, the python project should close. From there, the rest is sorted out through the [viewQuiz.js](/src/component/viewQuiz.js).
 
-### What the dev program needs to output. How does this fit?
+### What the program needs to output. How does this fit?
 A sample output has been made just for convenience. The line 
 ```py
 insert_data(database_name, table_name, subject, generate_random_string(), generate_random_string())
