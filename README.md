@@ -32,3 +32,8 @@ A sample output has been made just for convenience. The line
 insert_data(database_name, table_name, subject, generate_random_string(), generate_random_string())
 ```
 is the sample output. This line needs to be kept mostly the same. This line should be run <span style="font-style: bold;">ONCE</span> per output'd data. The `database_name`, `table_name`, and `subject` variables should be kept the same. the first `generate_random_string()` function should be replaced with the _question_, and the second `generate_random_string()` should be replaced with the corresponding _answer_. Once this has been changed, you can remove the `generate_random_string()` function, as it will not be required (along with the random / rnd references at the top of the file). Once this is all done; the program should work as intended.
+
+## Contributors
+
+- [AnUnsocialPigeon](https://github.com/AnUnsocialPigeon)
+- [Devli-T](https://github.com/Devli-T)

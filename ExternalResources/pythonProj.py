@@ -98,7 +98,7 @@ with open(file_name, 'r') as file:
         insert_data(database_name, table_name, subject, split_Response[2 * i][4:], split_Response[(2 * i) + 1][4:])
 
 
-#### dev program here ####
+#### program here ####
 
 # Populate the table with test data.
 for _ in range(25):
